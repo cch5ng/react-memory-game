@@ -3,6 +3,17 @@ import './App.css';
 import Score from './Score'
 import CardGrid from './CardGrid'
 
+const Modal = () => {
+  return (
+    <div className="modal">
+      Congratulations! Would you like to play again? <br />
+      Time: TBD <br />
+      Stars: TBD <br />
+
+    </div>
+  )
+}
+
 class App extends Component {
   state = {
     allCards: [
@@ -54,7 +65,7 @@ class App extends Component {
       { class: "fa fa-bomb",
         show: false,
         open: false,
-        match: true
+        match: false
       },
       { class: "fa fa-leaf",
         show: false,
@@ -64,7 +75,7 @@ class App extends Component {
       { class: "fa fa-bomb",
         show: false,
         open: false,
-        match: true
+        match: false
       },
       { class: "fa fa-bolt",
         show: false,
@@ -89,7 +100,8 @@ class App extends Component {
     ], // {class: "", show: bool, open: bool, match: bool}
     activeCardIds: [],
     score: 0, 
-    clickCount: 0
+    clickCount: 0,
+    showWinModal: false
   }
 
   // bind this
@@ -149,8 +161,11 @@ class App extends Component {
             return card
           }
         })
-        return { allCards, clickCount: 0 }
+        let showWinModal = this.checkGameWon();
+        console.log('showWinModal: ' + showWinModal)
+        return { allCards, clickCount: 0, showWinModal }
       })
+
       console.log('cards are matching')
     } else if (showingCards.length === 2 && showingCards[0].class !== showingCards[1].class) {
       console.log('cards not matching')
@@ -202,16 +217,33 @@ class App extends Component {
 
 // Shuffle function from http://stackoverflow.com/a/2450976
   shuffle(array) {
-      var currentIndex = array.length, temporaryValue, randomIndex;
+    var currentIndex = array.length, temporaryValue, randomIndex;
 
-      while (currentIndex !== 0) {
-          randomIndex = Math.floor(Math.random() * currentIndex);
-          currentIndex -= 1;
-          temporaryValue = array[currentIndex];
-          array[currentIndex] = array[randomIndex];
-          array[randomIndex] = temporaryValue;
+    while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+    return array;
+  }
+
+  checkGameWon() {
+    let won = false;
+    let counter = 0;
+
+    for (var i = 0; i < this.state.allCards.length; i++) {
+      if (this.state.allCards[i].match) {
+        counter += 1
+        // TODO refactor, this is working to display modal but not really great
+        if (counter >= 13) {
+          return true
+          break
+        }
       }
-      return array;
+    }
+    return won;
   }
 
   render() {
@@ -224,6 +256,11 @@ class App extends Component {
         <Score score={this.state.score} />
 
         <CardGrid allCards={this.state.allCards} activeCards={this.state.activeCards} cardClick={this.cardClick} />
+
+        { this.state.showWinModal && (
+            <Modal />
+        )}
+
       </div>
     );
   }

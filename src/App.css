@@ -134,3 +134,14 @@ h1 {
     float: right;
     cursor: pointer;
 }
+
+.modal {
+    z-index: 5;
+    position: absolute;
+    top: 120px;
+    background-color: #fff;
+    border: 1px solid #666;
+    border-radius: 12px;
+    width: 60%;
+    height: 200px;
+}
