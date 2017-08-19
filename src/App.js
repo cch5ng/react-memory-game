@@ -7,8 +7,8 @@ class App extends Component {
   state = {
     allCards: [
       { class: "fa fa-diamond",
-        show: true,
-        open: true,
+        show: false,
+        open: false,
         match: false
       },
       { class: "fa fa-paper-plane-o",
@@ -22,13 +22,13 @@ class App extends Component {
         match: false
       },
       { class: "fa fa-bolt",
-        show: true,
-        open: true,
+        show: false,
+        open: false,
         match: false
       },
       { class: "fa fa-cube",
-        show: true,
-        open: true,
+        show: false,
+        open: false,
         match: false
       },
       { class: "fa fa-anchor",
@@ -77,8 +77,8 @@ class App extends Component {
         match: false
       },
       { class: "fa fa-paper-plane-o",
-        show: true,
-        open: true,
+        show: false,
+        open: false,
         match: false
       },
       { class: "fa fa-cube",
@@ -87,7 +87,7 @@ class App extends Component {
         match: false
       },
     ], // {class: "", show: bool, open: bool, match: bool}
-    activeCards: [],
+    activeCardIds: [],
     score: 0, 
     clickCount: 0
   }
@@ -112,47 +112,72 @@ class App extends Component {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-  cardClick(ev) {
-    // console.log('clicked card')
-    // console.log('ev.target: ' + ev.target);
-    // console.log('ev.target.classList: ' + ev.target.classList);
-    console.log('ev.target.id: ' + ev.target.id);
-    console.log('ev.target.innerHTML: ' + ev.target.innerHTML);
+  cardClick(mid) {
+    const id = parseInt(mid, 10)
 
-    const id = parseInt(ev.target.id)
-    console.log('type id: ' + typeof id)
-
-    let updateCard = { ...this.state.allCards[id], show: true, open: true }
-
-    //this.setState({ allCards: [ ...this.state.allCards.slice(0, id), updateCard, ...this.state.allCards.slice(id + 1) ]})
-
-    this.setState(prevState => {
-      let allCards = prevState.allCards.map((card, idx) => {
-        return (idx === id ? updateCard : card)
-      })
-
-//     let updatedCards = []
-//     this.state.allCards.forEach((card, idx) => {
-//         //console.log('idx: ' + idx);
-//         if (idx === id) {
-//           console.log('updated card')
-//           updatedCards.push(updateCard)
-//         }
-//         console.log('did not update card')
-//         updatedCards.push(card)
-// //          return (idx === id ? updateCard : card)
-//     })
-//     this.setState({ allCards: updatedCards })
-
-      return { allCards }
+    this.state.allCards.forEach((card, idx) => {
+      console.log('idx: ' + idx + '; class: ' + card.class)
     })
 
-    // for each click, update clickCount +1
-    // first click: make the clicked card show true, open true
+    // 1 first card click
+    // check 2nd card clicked is not first flipped card
+    //
+    if (this.state.clickCount <= 1 && id !== this.state.activeCardIds[0]) {
+      let updateCard = { ...this.state.allCards[id], show: true, open: true }
+
+      this.setState(prevState => {
+        let allCards = prevState.allCards.map((card, idx) => {
+          return (idx === id ? updateCard : card)
+        })
+        let activeCardIds = [...prevState.activeCardIds, id]
+
+        return { allCards, clickCount: prevState.clickCount + 1, activeCardIds }
+      })
+    }
+
+    let showingCards = this.state.allCards.filter((card, idx) => {
+      return card.show === true || idx === id
+    })
+
+    if (showingCards.length === 2 && showingCards[0].class === showingCards[1].class) {
+      // TODO refactor
+      this.setState(prevState => {
+        let allCards = prevState.allCards.map(card => {
+          if (card.class === showingCards[0].class) {
+            return { ...card, show: false, open: false, match: true }
+          } else {
+            return card
+          }
+        })
+        return { allCards, clickCount: 0 }
+      })
+      console.log('cards are matching')
+    } else if (showingCards.length === 2 && showingCards[0].class !== showingCards[1].class) {
+      console.log('cards not matching')
+      window.setTimeout(() => {
+        this.setState(prevState => {
+          let allCards = prevState.allCards.map(card => {
+            if (card.class === showingCards[0].class || card.class === showingCards[1].class) {
+              return { ...card, show: false, open: false }
+            } else {
+              return card
+            }
+          })
+          return { allCards, clickCount: 0 }
+        })
+      }, 1250)
+    }
+
+
+    //}
+
+    // 2nd card click (check for match)
     // second click: check if class matches the other card whose open is true
       // then update both cards match to true
       // change both cards show/open to false
       // reset clickCount to 0
+
+
   }
 
 /*
