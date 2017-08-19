@@ -3,12 +3,18 @@ import './App.css';
 import Score from './Score'
 import CardGrid from './CardGrid'
 
-const Modal = () => {
+const Modal = (props) => {
   return (
     <div className="modal">
-      Congratulations! Would you like to play again? <br />
+      <span className="bold">Congratulations!</span> <br />
       Time: TBD <br />
-      Stars: TBD <br />
+      Stars: <ul className="stars">
+            {props.stars.map((item, idx) => (
+              <li key={idx}><i className="fa fa-star"></i></li>
+            ))}
+          </ul> 
+      <br />
+      <button className="playBtn" onClick={props.reset} >Play</button>
 
     </div>
   )
@@ -100,13 +106,96 @@ class App extends Component {
     ], // {class: "", show: bool, open: bool, match: bool}
     activeCardIds: [],
     clickCount: 0,
-    showWinModal: false,
+    showWinModal: true,
     stars: [0, 0, 0],
-    moves: 0
+    moves: 0,
+    defaultCards: [
+      { class: "fa fa-diamond",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-paper-plane-o",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-anchor",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-bolt",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-cube",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-anchor",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-leaf",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-bicycle",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-diamond",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-bomb",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-leaf",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-bomb",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-bolt",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-bicycle",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-paper-plane-o",
+        show: false,
+        open: false,
+        match: false
+      },
+      { class: "fa fa-cube",
+        show: false,
+        open: false,
+        match: false
+      },
+    ]
   }
 
   // bind this
   cardClick = this.cardClick.bind(this)
+  reset = this.reset.bind(this)
 
   //? shuffle cards on componentDidMount(), assume when refresh browser should reset game
 
@@ -202,6 +291,19 @@ class App extends Component {
 
   // reset the game from the modal
   reset() {
+    this.setState(prevState => {
+      let showWinModal = prevState.showWinModal
+      if (showWinModal) {
+        showWinModal = false
+      }
+      let stars = [0, 0, 0]
+      let moves = 0
+      let allCards = this.shuffle(prevState.defaultCards)
+      let clickCount = 0
+      let activeCardIds = []
+
+      return { showWinModal, stars, moves, allCards, clickCount, activeCardIds }
+    })
 
   }
 
@@ -260,12 +362,12 @@ class App extends Component {
             <h1>Matching Game</h1>
         </header>
 
-        <Score stars={this.state.stars} moves={this.state.moves} />
+        <Score stars={this.state.stars} moves={this.state.moves} reset={this.reset} />
 
         <CardGrid allCards={this.state.allCards} activeCards={this.state.activeCards} cardClick={this.cardClick} />
 
         { this.state.showWinModal && (
-            <Modal />
+            <Modal stars={this.state.stars} reset={this.reset} />
         )}
 
       </div>

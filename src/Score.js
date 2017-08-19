@@ -11,8 +11,7 @@ const Score = (props) => {
           </ul>
 
           <span className="moves">{props.moves}</span> Moves
-
-            <div className="restart">
+            <div className="restart" onClick={props.reset}>
             <i className="fa fa-repeat"></i>
           </div>
         </section>
