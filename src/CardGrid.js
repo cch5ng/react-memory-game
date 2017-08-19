@@ -13,7 +13,6 @@ class CardGrid extends Component {
       'match': this.props.allCards[cardId].match
     })
 
-
     return liClass
   }
 
@@ -21,70 +20,17 @@ class CardGrid extends Component {
     const { cardClick, allCards } = this.props
 
     return (
-        <ul className="deck" onClick={cardClick}>
+      <ul className="deck" onClick={(ev) => cardClick(ev.target.id)}>
 
-          {allCards.map((card, idx) => (
-            <li className={this.getClass(idx)} key={idx} id={idx} >
-              <i className={card.class}></i>
-            </li>
-          ))}
- 
-        </ul>
-      )
+        {allCards.map((card, idx) => (
+          <li className={this.getClass(idx)} key={idx} id={idx} >
+            <i className={card.class}></i>
+          </li>
+        ))}
+
+      </ul>
+    )
   }
 }
 
 export default CardGrid
-
-/* 
-
-            <li className="card" >
-                <i className="fa fa-diamond"></i>
-            </li>
-            <li className="card">
-                <i className="fa fa-paper-plane-o"></i>
-            </li>
-            <li className="card match">
-                <i className="fa fa-anchor"></i>
-            </li>
-            <li className="card">
-                <i className="fa fa-bolt"></i>
-            </li>
-            <li className="card">
-                <i className="fa fa-cube"></i>
-            </li>
-            <li className="card match">
-                <i className="fa fa-anchor"></i>
-            </li>
-            <li className="card">
-                <i className="fa fa-leaf"></i>
-            </li>
-            <li className="card">
-                <i className="fa fa-bicycle"></i>
-            </li>
-            <li className="card">
-                <i className="fa fa-diamond"></i>
-            </li>
-            <li className="card">
-                <i className="fa fa-bomb"></i>
-            </li>
-            <li className="card">
-                <i className="fa fa-leaf"></i>
-            </li>
-            <li className="card">
-                <i className="fa fa-bomb"></i>
-            </li>
-            <li className="card open show">
-                <i className="fa fa-bolt"></i>
-            </li>
-            <li className="card">
-                <i className="fa fa-bicycle"></i>
-            </li>
-            <li className="card">
-                <i className="fa fa-paper-plane-o"></i>
-            </li>
-            <li className="card">
-                <i className="fa fa-cube"></i>
-            </li>
-
-*/
