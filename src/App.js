@@ -99,9 +99,9 @@ class App extends Component {
       },
     ], // {class: "", show: bool, open: bool, match: bool}
     activeCardIds: [],
-    score: 0, 
     clickCount: 0,
     showWinModal: false,
+    stars: [0, 0, 0],
     moves: 0
   }
 
@@ -163,8 +163,15 @@ class App extends Component {
           }
         })
         let showWinModal = this.checkGameWon();
+        let moves = prevState.moves + 1
+        let stars = prevState.stars
+        if (moves === 4) {
+          stars = [0, 0]
+        } else if (moves === 8) {
+          stars = [0]
+        }
         console.log('showWinModal: ' + showWinModal)
-        return { allCards, clickCount: 0, showWinModal, moves: prevState.moves + 1 }
+        return { allCards, clickCount: 0, showWinModal, moves, stars }
       })
 
       console.log('cards are matching')
@@ -179,7 +186,15 @@ class App extends Component {
               return card
             }
           })
-          return { allCards, clickCount: 0, moves: prevState.moves + 1 }
+
+          let moves = prevState.moves + 1
+          let stars = prevState.stars
+          if (moves === 4) {
+            stars = [0, 0]
+          } else if (moves === 8) {
+            stars = [0]
+          }
+          return { allCards, clickCount: 0, moves, stars }
         })
       }, 1250)
     }
@@ -231,7 +246,7 @@ class App extends Component {
         // TODO refactor, this is working to display modal but not really great
         if (counter >= 13) {
           return true
-          break
+          //break
         }
       }
     }
@@ -245,7 +260,7 @@ class App extends Component {
             <h1>Matching Game</h1>
         </header>
 
-        <Score score={this.state.score} moves={this.state.moves} />
+        <Score stars={this.state.stars} moves={this.state.moves} />
 
         <CardGrid allCards={this.state.allCards} activeCards={this.state.activeCards} cardClick={this.cardClick} />
 

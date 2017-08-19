@@ -5,9 +5,9 @@ const Score = (props) => {
   return (
         <section className="score-panel">
           <ul className="stars">
-            <li><i className="fa fa-star"></i></li>
-            <li><i className="fa fa-star"></i></li>
-            <li><i className="fa fa-star"></i></li>
+            {props.stars.map((item, idx) => (
+              <li key={idx}><i className="fa fa-star"></i></li>
+            ))}
           </ul>
 
           <span className="moves">{props.moves}</span> Moves
@@ -20,3 +20,7 @@ const Score = (props) => {
 }
 
 export default Score
+
+// <li><i className="fa fa-star"></i></li>
+// <li><i className="fa fa-star"></i></li>
+// <li><i className="fa fa-star"></i></li>
