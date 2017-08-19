@@ -101,7 +101,8 @@ class App extends Component {
     activeCardIds: [],
     score: 0, 
     clickCount: 0,
-    showWinModal: false
+    showWinModal: false,
+    moves: 0
   }
 
   // bind this
@@ -163,7 +164,7 @@ class App extends Component {
         })
         let showWinModal = this.checkGameWon();
         console.log('showWinModal: ' + showWinModal)
-        return { allCards, clickCount: 0, showWinModal }
+        return { allCards, clickCount: 0, showWinModal, moves: prevState.moves + 1 }
       })
 
       console.log('cards are matching')
@@ -178,29 +179,20 @@ class App extends Component {
               return card
             }
           })
-          return { allCards, clickCount: 0 }
+          return { allCards, clickCount: 0, moves: prevState.moves + 1 }
         })
       }, 1250)
     }
+  }
 
-
-    //}
-
-    // 2nd card click (check for match)
-    // second click: check if class matches the other card whose open is true
-      // then update both cards match to true
-      // change both cards show/open to false
-      // reset clickCount to 0
-
+  // reset the game from the modal
+  reset() {
 
   }
 
 /*
  * Create a list that holds all of your cards
  */
-
-
-
 
 
   // function to update the score
@@ -253,7 +245,7 @@ class App extends Component {
             <h1>Matching Game</h1>
         </header>
 
-        <Score score={this.state.score} />
+        <Score score={this.state.score} moves={this.state.moves} />
 
         <CardGrid allCards={this.state.allCards} activeCards={this.state.activeCards} cardClick={this.cardClick} />
 

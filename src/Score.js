@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-const Score = () => {
+const Score = (props) => {
   return (
         <section className="score-panel">
           <ul className="stars">
@@ -10,7 +10,7 @@ const Score = () => {
             <li><i className="fa fa-star"></i></li>
           </ul>
 
-          <span className="moves">3</span> Moves
+          <span className="moves">{props.moves}</span> Moves
 
             <div className="restart">
             <i className="fa fa-repeat"></i>
