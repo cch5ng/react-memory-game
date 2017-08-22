@@ -388,7 +388,7 @@ class App extends Component {
     let secInt;
 
 // TODO check this; min off when timeSec % 60 === 0
-    minInt = timeSec > 0 ? Math.ceil(timeSec / 60 - 1) : 0
+    minInt = timeSec % 60 === 0 ? Math.ceil(timeSec / 60) : Math.ceil(timeSec / 60 - 1)
     secInt = timeSec % 60
 
     // console.log('minInt: ' + minInt)
