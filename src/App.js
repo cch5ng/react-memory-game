@@ -7,14 +7,15 @@ const Modal = (props) => {
   return (
     <div className="modal">
       <span className="bold">Congratulations!</span> <br />
-      Time: TBD <br />
+      Time: {props.time} <br />
       Stars: <ul className="stars">
             {props.stars.map((item, idx) => (
               <li key={idx}><i className="fa fa-star"></i></li>
             ))}
           </ul> 
       <br />
-      <button className="playBtn" onClick={props.reset} >Play</button>
+
+      <button className="playBtn" onClick={props.reset} >Play Again</button>
 
     </div>
   )
@@ -106,9 +107,10 @@ class App extends Component {
     ], // {class: "", show: bool, open: bool, match: bool}
     activeCardIds: [],
     clickCount: 0,
-    showWinModal: true,
+    showWinModal: false,
     stars: [0, 0, 0],
     moves: 0,
+    time: 0,
     defaultCards: [
       { class: "fa fa-diamond",
         show: false,
@@ -196,12 +198,25 @@ class App extends Component {
   // bind this
   cardClick = this.cardClick.bind(this)
   reset = this.reset.bind(this)
+  updateTime = this.updateTime.bind(this)
 
   //? shuffle cards on componentDidMount(), assume when refresh browser should reset game
 
   componentDidMount() {
     let shuffledCards = this.shuffle(this.state.allCards)
     this.setState({ allCards: shuffledCards })
+    this.timerId = setInterval(() => {
+      //console.log('hi')
+      this.setState(prevState => {
+        //console.log('prevState.time + 1: ' + (prevState.time + 1).toString())
+        return { time: prevState.time + 1 }
+      })
+      console.log('this.state.time: ' + this.state.time)
+    }, 1000)
+  }
+
+  componentWillUnmount() {
+    //clearInterval(this.timerId)
   }
 
 /*
@@ -252,6 +267,10 @@ class App extends Component {
           }
         })
         let showWinModal = this.checkGameWon();
+        console.log('showWinModal: ' + showWinModal)
+        if (showWinModal) {
+          clearInterval(this.timerId)
+        }
         let moves = prevState.moves + 1
         let stars = prevState.stars
         if (moves === 4) {
@@ -259,7 +278,6 @@ class App extends Component {
         } else if (moves === 8) {
           stars = [0]
         }
-        console.log('showWinModal: ' + showWinModal)
         return { allCards, clickCount: 0, showWinModal, moves, stars }
       })
 
@@ -355,6 +373,21 @@ class App extends Component {
     return won;
   }
 
+  updateTime() {
+    this.setState(prevState => {
+      console.log('prevState.time + 1: ' + (prevState.time + 1).toString())
+      return { time: prevState.time + 1 }
+    })
+    console.log('this.state.time: ' + this.state.time)
+  }
+
+  // given time (ms) returns a nice string (min:sec)
+  prettyTime(timeMs) {
+    let prettyStr;
+
+    return prettyStr
+  }
+
   render() {
     return (
       <div className="App container">
@@ -362,12 +395,12 @@ class App extends Component {
             <h1>Matching Game</h1>
         </header>
 
-        <Score stars={this.state.stars} moves={this.state.moves} reset={this.reset} />
+        <Score stars={this.state.stars} moves={this.state.moves} reset={this.reset} time={this.state.time} />
 
         <CardGrid allCards={this.state.allCards} activeCards={this.state.activeCards} cardClick={this.cardClick} />
 
         { this.state.showWinModal && (
-            <Modal stars={this.state.stars} reset={this.reset} />
+            <Modal stars={this.state.stars} reset={this.reset} time={this.state.time}  />
         )}
 
       </div>

@@ -10,7 +10,13 @@ const Score = (props) => {
             ))}
           </ul>
 
+
           <span className="moves">{props.moves}</span> Moves
+
+          <span className="time">
+            Time: {props.time}
+          </span>
+
             <div className="restart" onClick={props.reset}>
             <i className="fa fa-repeat"></i>
           </div>
