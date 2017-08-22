@@ -137,6 +137,20 @@ h1 {
     cursor: pointer;
 }
 
+.playBtn {
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #ccc;
+    border-style: solid;
+
+    border-top-color: #ccc;
+    border-right-color: #aaa;
+    border-bottom-color: #aaa;
+    border-left-color: #ccc;
+}
+
 .modal {
     z-index: 5;
     position: absolute;
