@@ -382,8 +382,19 @@ class App extends Component {
   }
 
   // given time (ms) returns a nice string (min:sec)
-  prettyTime(timeMs) {
+  prettyTime(timeSec) {
     let prettyStr;
+    let minInt;
+    let secInt;
+
+// TODO check this; min off when timeSec % 60 === 0
+    minInt = timeSec > 0 ? Math.ceil(timeSec / 60 - 1) : 0
+    secInt = timeSec % 60
+
+    // console.log('minInt: ' + minInt)
+    // console.log('secInt: ' + secInt)
+    prettyStr = minInt.toString() + ':' + secInt.toString()
+    console.log('prettyStr: ' + prettyStr)
 
     return prettyStr
   }
@@ -395,12 +406,12 @@ class App extends Component {
             <h1>Matching Game</h1>
         </header>
 
-        <Score stars={this.state.stars} moves={this.state.moves} reset={this.reset} time={this.state.time} />
+        <Score stars={this.state.stars} moves={this.state.moves} reset={this.reset} time={this.prettyTime(this.state.time)} />
 
         <CardGrid allCards={this.state.allCards} activeCards={this.state.activeCards} cardClick={this.cardClick} />
 
         { this.state.showWinModal && (
-            <Modal stars={this.state.stars} reset={this.reset} time={this.state.time}  />
+            <Modal stars={this.state.stars} reset={this.reset} time={this.prettyTime(this.state.time)}  />
         )}
 
       </div>
