@@ -206,17 +206,14 @@ class App extends Component {
     let shuffledCards = this.shuffle(this.state.allCards)
     this.setState({ allCards: shuffledCards })
     this.timerId = setInterval(() => {
-      //console.log('hi')
       this.setState(prevState => {
-        //console.log('prevState.time + 1: ' + (prevState.time + 1).toString())
         return { time: prevState.time + 1 }
       })
-      console.log('this.state.time: ' + this.state.time)
     }, 1000)
   }
 
   componentWillUnmount() {
-    //clearInterval(this.timerId)
+    clearInterval(this.timerId)
   }
 
 /*
@@ -232,9 +229,9 @@ class App extends Component {
   cardClick(mid) {
     const id = parseInt(mid, 10)
 
-    this.state.allCards.forEach((card, idx) => {
-      console.log('idx: ' + idx + '; class: ' + card.class)
-    })
+    // this.state.allCards.forEach((card, idx) => {
+    //   console.log('idx: ' + idx + '; class: ' + card.class)
+    // })
 
     // 1 first card click
     // check 2nd card clicked is not first flipped card
@@ -267,7 +264,6 @@ class App extends Component {
           }
         })
         let showWinModal = this.checkGameWon();
-        console.log('showWinModal: ' + showWinModal)
         if (showWinModal) {
           clearInterval(this.timerId)
         }
@@ -280,10 +276,7 @@ class App extends Component {
         }
         return { allCards, clickCount: 0, showWinModal, moves, stars }
       })
-
-      console.log('cards are matching')
     } else if (showingCards.length === 2 && showingCards[0].class !== showingCards[1].class) {
-      console.log('cards not matching')
       window.setTimeout(() => {
         this.setState(prevState => {
           let allCards = prevState.allCards.map(card => {
@@ -375,10 +368,8 @@ class App extends Component {
 
   updateTime() {
     this.setState(prevState => {
-      console.log('prevState.time + 1: ' + (prevState.time + 1).toString())
       return { time: prevState.time + 1 }
     })
-    console.log('this.state.time: ' + this.state.time)
   }
 
   // given time (ms) returns a nice string (min:sec)
@@ -391,12 +382,16 @@ class App extends Component {
     minInt = timeSec % 60 === 0 ? Math.ceil(timeSec / 60) : Math.ceil(timeSec / 60 - 1)
     secInt = timeSec % 60
 
-    // console.log('minInt: ' + minInt)
-    // console.log('secInt: ' + secInt)
-    prettyStr = minInt.toString() + ':' + secInt.toString()
-    console.log('prettyStr: ' + prettyStr)
-
+    prettyStr = this.prefixZero(minInt.toString()) + ':' + this.prefixZero(secInt.toString())
     return prettyStr
+  }
+
+  prefixZero(timeStr) {
+    let timeStrNew;
+
+    timeStr.length === 1 ? timeStrNew = '0' + timeStr : timeStrNew = timeStr
+
+    return timeStrNew;
   }
 
   render() {
