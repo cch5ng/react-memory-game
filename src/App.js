@@ -199,17 +199,14 @@ class App extends Component {
   cardClick = this.cardClick.bind(this)
   reset = this.reset.bind(this)
   updateTime = this.updateTime.bind(this)
+  startTimer = this.startTimer.bind(this)
 
   //? shuffle cards on componentDidMount(), assume when refresh browser should reset game
 
   componentDidMount() {
     let shuffledCards = this.shuffle(this.state.allCards)
     this.setState({ allCards: shuffledCards })
-    this.timerId = setInterval(() => {
-      this.setState(prevState => {
-        return { time: prevState.time + 1 }
-      })
-    }, 1000)
+    this.startTimer()
   }
 
   componentWillUnmount() {
@@ -229,6 +226,7 @@ class App extends Component {
   cardClick(mid) {
     const id = parseInt(mid, 10)
 
+    // used for game testing
     // this.state.allCards.forEach((card, idx) => {
     //   console.log('idx: ' + idx + '; class: ' + card.class)
     // })
@@ -312,10 +310,12 @@ class App extends Component {
       let allCards = this.shuffle(prevState.defaultCards)
       let clickCount = 0
       let activeCardIds = []
-
-      return { showWinModal, stars, moves, allCards, clickCount, activeCardIds }
+      let time = 0
+      return { showWinModal, stars, moves, allCards, clickCount, activeCardIds, time }
     })
 
+    clearInterval(this.timerId)
+    this.startTimer()
   }
 
 /*
@@ -364,6 +364,14 @@ class App extends Component {
       }
     }
     return won;
+  }
+
+  startTimer() {
+    this.timerId = setInterval(() => {
+      this.setState(prevState => {
+        return { time: prevState.time + 1 }
+      })
+    }, 1000)
   }
 
   updateTime() {
